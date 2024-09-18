@@ -1,0 +1,23 @@
+pipeline {
+    agent any 
+    tools {
+        maven 'maven'
+    }
+    stages {
+        stage('cloning the repo from github') {
+            steps {
+                git credentialsId: 'github-credentials', url: 'https://github.com/perlagithub/sample-web-project.git'
+            } 
+        }
+         stage('build the code using maven') {
+            steps {
+                sh 'mvn clean install'
+            }
+        } 
+        stage('deploying artifact to tomcat webserver') {
+            steps {
+             deploy adapters: [tomcat7(credentialsId: 'tomcat-credentials', path: '', url: 'http://3.95.6.42:8080')], contextPath: null, war: '**/*.war'  
+            }
+        }
+    }
+}
