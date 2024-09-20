@@ -1,0 +1,17 @@
+pipeline {
+    agent any 
+    tools {
+        maven 'maven'
+    }
+     stages {
+        stage('cloning the repo from github') {
+            steps {
+                git credentialsId: 'ramesh', url: 'https://github.com/perlagithub/sample-web-project.git'
+            } 
+        }
+         stage('build the code using maven') {
+            steps {
+                sh 'mvn clean install'
+            }
+        } 
+    }
